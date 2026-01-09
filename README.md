@@ -2,6 +2,22 @@
 
 A production-ready educational platform connecting students and teachers with Q&A, notes sharing, and support tickets.
 
+## ✨ Features
+
+### Core Features
+- **Q&A System**: Students ask questions, get answers from peers and verified teachers. Upload images and files.
+- **Notes & Resources**: Teachers share PDFs, documents, and learning materials. Students can download and access resources.
+- **Peer Learning**: Students answer each other's questions. Vote on best answers to build a collaborative community.
+- **Support Tickets**: Raise support requests for academic or technical issues. Get help from teachers and admins.
+- **Smart Search**: Find questions, notes, and resources with search and filtering.
+- **Real-time Notifications**: Get notified when someone answers your question or responds to your support ticket.
+- **Dynamic Subjects**: Users can add custom subjects instead of being limited to predefined options.
+
+### Role-Based Access Control
+- **Students**: Ask questions, answer questions, create support tickets, browse resources
+- **Teachers**: Answer questions, upload notes, respond to support tickets (after admin verification)
+- **Admins**: User management, teacher verification, content moderation, analytics, system configuration
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -148,11 +164,79 @@ Generate password hash:
 node -e "const bcrypt = require('bcryptjs'); bcrypt.hash('your-password', 10).then(h => console.log(h));"
 ```
 
-## 🏗️ Architecture
+## 🏗️ Tech Stack
 
-**Backend:** Node.js + Express + TypeScript + PostgreSQL + Redis + NATS  
-**Frontend:** Next.js 14 + TypeScript + Tailwind CSS  
-**Infrastructure:** Docker + Docker Compose
+### Backend
+- **Node.js** with **Express.js** - RESTful API server
+- **TypeScript** - Type-safe development
+- **PostgreSQL** - Primary database for persistent data
+- **Redis** - Caching layer and distributed rate limiting
+- **NATS** - Event-driven messaging and real-time notifications
+- **JWT** - Secure token-based authentication
+- **bcryptjs** - Password hashing
+- **Multer** - File upload handling
+
+### Frontend
+- **Next.js 14** (App Router) - React framework with SSR
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **Zustand** - State management
+- **Axios** - HTTP client
+- **React Hot Toast** - Notifications
+- **React Markdown** - Markdown rendering
+
+### Infrastructure
+- **Docker** & **Docker Compose** - Containerization and orchestration
+- **PostgreSQL** - Relational database
+- **Redis** - In-memory cache and rate limiting
+- **NATS** - Message broker for real-time events
+
+## 🔄 Working Flow
+
+### Application Flow
+```
+┌─────────────┐
+│   Frontend  │ (Next.js - Port 3000)
+│  (Next.js)  │
+└──────┬──────┘
+       │ HTTP/REST API
+       │
+┌──────▼─────────────────────────────────────┐
+│           Backend API (Express)            │
+│              (Port 5000)                   │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐│
+│  │   Auth   │  │ Questions│  │ Answers  ││
+│  │  Module  │  │  Module  │  │  Module  ││
+│  └──────────┘  └──────────┘  └──────────┘│
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐│
+│  │  Notes   │  │ Support  │  │ Notify   ││
+│  │  Module  │  │  Module  │  │  Module  ││
+│  └──────────┘  └──────────┘  └──────────┘│
+└──────┬──────────┬──────────┬───────────────┘
+       │          │          │
+       │          │          │
+┌──────▼──┐  ┌────▼────┐  ┌──▼────┐
+│PostgreSQL│  │ Redis  │  │ NATS  │
+│ (Port    │  │(Port   │  │(Port  │
+│  5432)   │  │ 6379)  │  │ 4222) │
+└──────────┘  └────────┘  └───────┘
+```
+
+### User Flow
+1. **Registration/Login**: Users register or login to get JWT token
+2. **Role Assignment**: Users are assigned roles (student, teacher, admin)
+3. **Teacher Verification**: Teachers must be verified by admin before they can answer questions or upload notes
+4. **Content Creation**: Students ask questions, teachers upload notes
+5. **Interaction**: Students answer questions, vote on answers, create support tickets
+6. **Notifications**: Real-time notifications via NATS when events occur
+7. **Admin Management**: Admins manage users, verify teachers, moderate content
+
+### Data Flow
+- **Authentication**: JWT tokens stored in frontend, validated on each request
+- **Caching**: Frequently accessed data (questions, answers) cached in Redis
+- **Real-time Events**: NATS publishes events (new answer, notification) to subscribers
+- **File Storage**: Uploaded files stored locally (configurable for cloud storage)
+- **Database**: PostgreSQL stores all persistent data (users, questions, answers, notes, tickets)
 
 ## 📝 Common Commands
 
@@ -193,15 +277,6 @@ docker-compose ps
 - SQL injection protection (parameterized queries)
 - Role-based access control
 
-## 📚 Key Features
-
-- Q&A System with voting and answers
-- Notes & Resources sharing
-- Support Tickets system
-- Teacher verification workflow
-- Admin dashboard
-- Real-time notifications
-- Dynamic subjects
 
 ## 🐛 Troubleshooting
 
