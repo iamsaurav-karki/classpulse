@@ -41,6 +41,6 @@ RUN mkdir -p uploads/images uploads/documents uploads/profiles && \
 
 USER appuser
 
-EXPOSE 5000
+EXPOSE 9001
 
 CMD ["node", "dist/server.js"]

@@ -192,7 +192,7 @@ export const remove = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    await deleteQuestion(req.params.id, req.user.userId, req.user.role);
+    await deleteQuestion(req.params.id, req.user.userId);
     
     // Invalidate cache
     await CacheService.invalidateQuestion(req.params.id);

@@ -10,8 +10,17 @@ export const requireRole = (...allowedRoles: UserRole[]) => {
       return;
     }
 
-    if (!allowedRoles.includes(req.user.role as UserRole)) {
-      res.status(403).json({ error: 'Insufficient permissions' });
+    // Normalize role to lowercase for comparison (database stores as enum but JWT might vary)
+    const userRole = (req.user.role as string)?.toLowerCase();
+    const normalizedAllowedRoles = allowedRoles.map(r => r.toLowerCase());
+
+    if (!normalizedAllowedRoles.includes(userRole)) {
+      console.error(`❌ Access denied: User role '${req.user.role}' not in allowed roles:`, allowedRoles);
+      res.status(403).json({ 
+        error: 'Insufficient permissions',
+        userRole: req.user.role,
+        requiredRoles: allowedRoles
+      });
       return;
     }
 
@@ -21,6 +30,25 @@ export const requireRole = (...allowedRoles: UserRole[]) => {
 
 export const requireTeacher = requireRole('teacher', 'admin');
 export const requireAdmin = requireRole('admin');
+
+// Debug logging for admin access issues
+export const requireAdminWithLogging = (req: Request, res: Response, next: NextFunction): void => {
+  if (!req.user) {
+    console.log('❌ Admin access denied: No user in request');
+    res.status(401).json({ error: 'Authentication required' });
+    return;
+  }
+
+  console.log('🔍 Admin check - User role:', req.user.role, 'User ID:', req.user.userId);
+  
+  if (req.user.role !== 'admin') {
+    console.log('❌ Admin access denied: User role is', req.user.role, 'expected admin');
+    res.status(403).json({ error: 'Insufficient permissions', userRole: req.user.role });
+    return;
+  }
+
+  next();
+};
 
 /**
  * Middleware to require verified teacher (or admin)

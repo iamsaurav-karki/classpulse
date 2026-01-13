@@ -33,8 +33,9 @@ const getClientInfo = (req: Request) => {
 // User Management
 export const listUsers = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    // Role check is already done by requireAdmin middleware, but double-check for safety
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -57,8 +58,8 @@ export const listUsers = async (req: Request, res: Response): Promise<void> => {
 
 export const getUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -77,8 +78,8 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 
 export const suspend = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -109,8 +110,8 @@ export const suspend = async (req: Request, res: Response): Promise<void> => {
 
 export const activate = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -141,8 +142,8 @@ export const activate = async (req: Request, res: Response): Promise<void> => {
 
 export const changeRole = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -180,8 +181,8 @@ export const changeRole = async (req: Request, res: Response): Promise<void> => 
 // Teacher Verification
 export const listPendingTeachers = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -195,8 +196,8 @@ export const listPendingTeachers = async (req: Request, res: Response): Promise<
 
 export const approve = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -227,8 +228,8 @@ export const approve = async (req: Request, res: Response): Promise<void> => {
 
 export const reject = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -260,8 +261,8 @@ export const reject = async (req: Request, res: Response): Promise<void> => {
 // Content Moderation
 export const listQuestions = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -282,8 +283,8 @@ export const listQuestions = async (req: Request, res: Response): Promise<void> 
 
 export const lock = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -314,8 +315,8 @@ export const lock = async (req: Request, res: Response): Promise<void> => {
 
 export const unlock = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -346,8 +347,8 @@ export const unlock = async (req: Request, res: Response): Promise<void> => {
 
 export const deleteQ = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -378,8 +379,8 @@ export const deleteQ = async (req: Request, res: Response): Promise<void> => {
 
 export const listAnswers = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -399,8 +400,8 @@ export const listAnswers = async (req: Request, res: Response): Promise<void> =>
 
 export const deleteA = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -432,8 +433,8 @@ export const deleteA = async (req: Request, res: Response): Promise<void> => {
 // Support Management
 export const listSupportTickets = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -455,8 +456,8 @@ export const listSupportTickets = async (req: Request, res: Response): Promise<v
 // Analytics
 export const analytics = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 
@@ -471,8 +472,8 @@ export const analytics = async (req: Request, res: Response): Promise<void> => {
 // Admin Logs
 export const listLogs = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.user || req.user.role !== 'admin') {
-      sendError(res, 'Unauthorized', 403);
+    if (!req.user) {
+      sendError(res, 'Authentication required', 401);
       return;
     }
 

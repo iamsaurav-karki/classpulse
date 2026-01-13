@@ -27,11 +27,11 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        imgSrc: ["'self'", 'data:', 'blob:', 'http://localhost:5000', 'http://localhost:3000', 'http://backend:5000', '*'],
+        imgSrc: ["'self'", 'data:', 'blob:', 'http://localhost:9001', 'http://localhost:9000', 'http://backend:9001', '*'],
         scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
         styleSrc: ["'self'", "'unsafe-inline'", 'https:'],
         fontSrc: ["'self'", 'data:', 'https:'],
-        connectSrc: ["'self'", 'http://localhost:5000', 'http://localhost:3000'],
+        connectSrc: ["'self'", 'http://localhost:9001', 'http://localhost:9000'],
       },
     },
   })

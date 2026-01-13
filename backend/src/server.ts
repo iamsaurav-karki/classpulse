@@ -4,6 +4,7 @@ import { logger } from './utils/logger';
 import { ensureUploadDir } from './config/storage';
 import { getRedisClient, closeRedis } from './config/redis';
 import { getNatsConnection, closeNats } from './config/nats';
+import { bootstrapAdmin } from './utils/bootstrap';
 import path from 'path';
 
 const PORT = config.port;
@@ -60,6 +61,9 @@ async function initializeServices() {
         throw error;
       }
     }
+
+    // Bootstrap admin user (runs after database connection is established)
+    await bootstrapAdmin();
   } catch (error) {
     logger.error('Failed to initialize services:', error);
     process.exit(1);

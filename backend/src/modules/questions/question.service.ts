@@ -234,13 +234,13 @@ export const updateQuestion = async (questionId: string, userId: string, data: P
   return result.rows[0];
 };
 
-export const deleteQuestion = async (questionId: string, userId: string, userRole: string) => {
-  // Only allow deletion by owner or admin
+export const deleteQuestion = async (questionId: string, userId: string) => {
+  // Only allow deletion by the question owner (not teachers or admins)
   const result = await pool.query(
     `DELETE FROM questions 
-     WHERE id = $1 AND (user_id = $2 OR $3 = 'admin')
+     WHERE id = $1 AND user_id = $2
      RETURNING id`,
-    [questionId, userId, userRole]
+    [questionId, userId]
   );
 
   if (result.rows.length === 0) {
