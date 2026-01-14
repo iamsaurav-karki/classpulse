@@ -24,6 +24,16 @@ A production-ready educational platform connecting students and teachers with Q&
 - Docker 20.10+ and Docker Compose 2.0+
 - At least 4GB RAM
 
+### Database Setup
+
+**Automatic Migrations**: The backend automatically runs database migrations on startup. Migration files in `database/migrations/` are applied automatically in alphabetical order.
+
+**Manual Migration** (if needed):
+```bash
+# Run a specific migration manually
+docker exec -i classpulse-db psql -U postgres -d classpulse < database/migrations/002_add_landing_page_content.sql
+```
+
 ### 1. Clone Repository
 ```bash
 git clone <repository-url>
@@ -39,7 +49,7 @@ Create `.env` file in root directory:
 # Required Configuration
 # ============================================
 NODE_ENV=production
-PORT=5000
+PORT=9001
 
 # JWT (REQUIRED - Generate: openssl rand -base64 32)
 JWT_SECRET=your-super-secret-jwt-key-min-32-chars
@@ -63,19 +73,19 @@ REDIS_PASSWORD=redispassword
 NATS_SERVERS=nats://nats:4222
 
 # CORS (IMPORTANT for production!)
-# Local: CORS_ORIGIN=http://localhost:3000
+# Local: CORS_ORIGIN=http://localhost:9000
 # Production: CORS_ORIGIN=https://yourdomain.com
-CORS_ORIGIN=http://localhost:3000
+CORS_ORIGIN=http://localhost:9000
 
 # Frontend URLs (REQUIRED for production!)
 # Local: 
-# NEXT_PUBLIC_API_URL=http://localhost:5000/api
-# NEXT_PUBLIC_APP_URL=http://localhost:3000
+# NEXT_PUBLIC_API_URL=http://localhost:9001/api
+# NEXT_PUBLIC_APP_URL=http://localhost:9000
 # Production:
 # NEXT_PUBLIC_API_URL=https://api.yourdomain.com/api
 # NEXT_PUBLIC_APP_URL=https://yourdomain.com
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:9001/api
+NEXT_PUBLIC_APP_URL=http://localhost:9000
 
 # Admin Bootstrap (creates admin on first startup)
 ADMIN_EMAIL=admin@classpulse.com
@@ -133,9 +143,9 @@ docker-compose up -d --build
 ```
 
 ### 4. Access Application
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000/api
-- Health: http://localhost:5000/health
+- Frontend: http://localhost:9000
+- Backend API: http://localhost:9001/api
+- Health: http://localhost:9001/health
 
 ### 5. Admin Account
 
@@ -196,14 +206,14 @@ node -e "const bcrypt = require('bcryptjs'); bcrypt.hash('your-password', 10).th
 ### Application Flow
 ```
 ┌─────────────┐
-│   Frontend  │ (Next.js - Port 3000)
+│   Frontend  │ (Next.js - Port 9000)
 │  (Next.js)  │
 └──────┬──────┘
        │ HTTP/REST API
        │
 ┌──────▼─────────────────────────────────────┐
 │           Backend API (Express)            │
-│              (Port 5000)                   │
+│              (Port 9001)                   │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐│
 │  │   Auth   │  │ Questions│  │ Answers  ││
 │  │  Module  │  │  Module  │  │  Module  ││
