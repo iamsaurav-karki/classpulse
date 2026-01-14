@@ -5,6 +5,7 @@ import { ensureUploadDir } from './config/storage';
 import { getRedisClient, closeRedis } from './config/redis';
 import { getNatsConnection, closeNats } from './config/nats';
 import { bootstrapAdmin } from './utils/bootstrap';
+import { runMigrations } from './utils/migrations';
 import path from 'path';
 
 const PORT = config.port;
@@ -62,7 +63,20 @@ async function initializeServices() {
       }
     }
 
-    // Bootstrap admin user (runs after database connection is established)
+    // Run database migrations (runs after database connection is established)
+    try {
+      await runMigrations();
+    } catch (error) {
+      logger.error('❌ Migration failed:', error);
+      // In production, fail if migrations fail
+      if (config.nodeEnv === 'production') {
+        throw error;
+      }
+      // In development, log but continue
+      logger.warn('⚠️  Continuing despite migration errors (development mode)');
+    }
+
+    // Bootstrap admin user (runs after migrations)
     await bootstrapAdmin();
   } catch (error) {
     logger.error('Failed to initialize services:', error);
