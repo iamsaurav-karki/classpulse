@@ -311,6 +311,3 @@ docker-compose restart
 - Ensure `ADMIN_EMAIL` and `ADMIN_PASSWORD` are set
 - Check logs: `docker-compose logs backend`
 
-## 📄 License
-
-MIT License
